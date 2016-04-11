@@ -2,7 +2,7 @@
 import pandas
 import argparse
 
-def parse_args():zo
+def parse_args():
     # Parse arguments
     parser = argparse.ArgumentParser(
             description="Produce csv files for importing into qGIS from structure files.")
@@ -48,7 +48,7 @@ def main():
 
     # Get sample and population name from the 1st column of the Structure input file
     strfile = pandas.read_table(args.strfile, header=None, delim_whitespace=True)
-    samplenames = strfile.iloc[::2,0]i
+    samplenames = strfile.iloc[::2,0]
     samplenames = samplenames.reset_index()[0]
     popnames = samplenames.str.rpartition('_')[0]
 
