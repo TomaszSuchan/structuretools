@@ -2,7 +2,11 @@
 import pandas
 import argparse
 
+<<<<<<< HEAD
 def parse_args():
+=======
+def parse_args()
+>>>>>>> origin/master
     # Parse arguments
     parser = argparse.ArgumentParser(
             description="Produce csv files for importing into qGIS from structure files.")
