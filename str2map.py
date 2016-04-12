@@ -1,5 +1,11 @@
 #! /usr/bin/env python3
-import pandas
+try:
+    import pandas
+except ImportError, e:
+    print("Error: pandas package not found")
+    print("Please install using: pip install pandas\n")
+    pass
+
 import argparse
 
 def parse_args():
