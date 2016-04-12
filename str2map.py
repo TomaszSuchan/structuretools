@@ -58,7 +58,7 @@ def main():
 
     # Merge population name with Structure output
     structure = pandas.read_table(args.structure, header=None, delim_whitespace=True)
-    structure = structure.round(0)
+    structure = structure.round(0).astype(int)
     structure = pandas.concat([popnames, structure], axis=1, ignore_index=True)
 
     # Get pivot table with populations as rows and haplotypes as columns
