@@ -1,10 +1,9 @@
 #! /usr/bin/env python3
 try:
     import pandas
-except ImportError, e:
-    print("Error: pandas package not found")
-    print("Please install using: pip install pandas\n")
-    pass
+except ImportError:
+    raise ImportError("Pandas package not found, please install using: pip install pandas")
+    
 
 import argparse
 
@@ -29,7 +28,7 @@ def parse_args():
             type=str,
             dest="sep",
             default="_",
-            help='The separator in the sample name, the scripts assumes the format: POP[separator]SAMPLE')
+            help='The separator in the sample name, the scripts assumes the format: POP[separator]SAMPLE (default is underscore)')
 
     parser.add_argument('-i',
             type=argparse.FileType('r'),
@@ -39,7 +38,7 @@ def parse_args():
 
     parser.add_argument('-o',
             type=argparse.FileType('w'),
-            dest="outfile",
+            dest="output",
             default='-',
             help='Output file (default: STDOUT)')
 
@@ -47,7 +46,6 @@ def parse_args():
 
 def main():
     args = parse_args()
-    print(args)
 
     pops = pandas.read_table(args.popfile, header=None, delim_whitespace=True)
     pops.columns = ['pop','lon','lat']
@@ -70,7 +68,7 @@ def main():
     pivottable = pivottable.drop(0, 1)
 
     # Write csv file for qGIS
-    pivottable.to_csv(outfile) 
+    args.output.write(pivottable.to_csv(sep='\t', index=False, )) 
 
 if __name__ == "__main__":
     main()
