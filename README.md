@@ -24,5 +24,5 @@ arguments:
 Example:
 
 ```
-./str2map.py -p sampledata/populations.txt -f sampledata/1.str -i sampledata/1.2.meanQ -o out.csv```
+./str2map.py -p sampledata/populations.txt -f sampledata/1.str -i sampledata/1.2.meanQ -o out.csv
 ```
