@@ -50,15 +50,16 @@ def main():
     pops = pandas.read_table(args.popfile, header=None, delim_whitespace=True)
     pops.columns = ['pop','lon','lat']
 
+    # Load Structure file
+    structure = pandas.read_table(args.strfile, header=None, delim_whitespace=True)
+
     # Get sample and population name from the 1st column of the Structure input file
-    strfile = pandas.read_table(args.strfile, header=None, delim_whitespace=True)
-    samplenames = strfile.iloc[::2,0]
+    samplenames = structure.iloc[::2,0]
     samplenames = samplenames.reset_index()[0]
     popnames = samplenames.str.rpartition('_')[0]
 
     # Merge population name with Structure output
-    structure = pandas.read_table(args.structure, header=None, delim_whitespace=True)
-    structure = structure.round(0).astype(int)
+    structure = structure.round(0).astype(int) #round the likelihoods
     structure = pandas.concat([popnames, structure], axis=1, ignore_index=True)
 
     # Get pivot table with populations as rows and haplotypes as columns
@@ -68,7 +69,7 @@ def main():
     pivottable = pivottable.drop(0, 1)
 
     # Write csv file for qGIS
-    args.output.write(pivottable.to_csv(sep='\t', index=False, )) 
+    args.output.write(pivottable.to_csv(sep='\t', index=False)) 
 
 if __name__ == "__main__":
     main()

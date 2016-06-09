@@ -26,3 +26,27 @@ Example:
 ```
 ./str2map.py -p sampledata/populations.txt -f sampledata/1.str -i sampledata/1.2.meanQ -o out.csv
 ```
+
+## plotmap.py
+Tool for plotting a map from str2map.py output.
+
+Usage:
+
+```
+plotmap.py [-h] -i INPUT [-o OUTPUT] [-c] [-p PIESIZE]
+
+arguments:
+  -h, --help  show this help message and exit
+  -i INPUT    Input file or STDIN (default), with pop, lon, lat and population
+              assigment columns; as produced by str2map.py script.
+  -o OUTPUT   Output file name; supports png, pdf, ps, eps and svg.
+  -c          Uses point coordinates to calculate map extent. If not used,
+              the default extent is Europe.
+  -p PIESIZE  Size of the piecharts; default = 300.
+```
+
+Example:
+
+```
+./plotmap.py -i out.csv -o map.png
+```
