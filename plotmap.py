@@ -36,7 +36,6 @@ def parse_args():
 
     parser.add_argument('-i',
             type=argparse.FileType('r'),
-            required=True,
             dest='input',
             default='-',
             help='Input file or STDIN (default), with pop, lon, lat and population assigment columns; as produced by str2map.py script.')

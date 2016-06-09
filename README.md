@@ -16,7 +16,7 @@ arguments:
                 this order
   -f STRFILE    The file that was used for the Structure run
   -s SEP        The separator in the sample name, the scripts assumes the
-                format: POP[separator]SAMPLE
+                format: POP[separator]SAMPLE (default is underscore)
   -i STRUCTURE  Structure output file
   -o OUTFILE    Output file (default: STDOUT)
 ```
@@ -28,7 +28,7 @@ Example:
 ```
 
 ## plotmap.py
-Tool for plotting a map from str2map.py output.
+Tool for plotting a map from `str2map.py` output.
 
 Usage:
 
@@ -49,4 +49,13 @@ Example:
 
 ```
 ./plotmap.py -i out.csv -o map.png
+```
+
+## Piping the above scripts
+
+You can skip saving the intermediate csv file and pipe `str2map.py` output directly to `plotmap.py`:
+
+```
+./str2map.py -p sampledata/populations.txt 
+-f sampledata/1.str -i sampledata/1.2.meanQ | ./plotmap.py -o map.png
 ```
