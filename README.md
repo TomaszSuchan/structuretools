@@ -43,6 +43,8 @@ arguments:
   -c          Uses point coordinates to calculate map extent. If not used,
               the default extent is Europe.
   -p PIESIZE  Size of the piecharts; default = 300.
+  -a ALPHA    Opacity of piecharts; 0.0 transparent through 1.0 opaque 
+              (default).
 ```
 
 Example:
@@ -50,6 +52,8 @@ Example:
 ```
 ./plotmap.py -i out.csv -o map.png
 ```
+
+Important note - currently 10-colour palette is hardcoded in the script, you can use more by changing `Tableau_10` in the line 28 to `Tableau_20` if you structure file has K > 10.
 
 ## Piping the above scripts
 

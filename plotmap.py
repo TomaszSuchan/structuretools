@@ -24,7 +24,10 @@ try:
 except ImportError:
     raise ImportError("Basemap package not found, please install from https://sourceforge.net/projects/matplotlib/files/matplotlib-toolkits/")
 
-#from palettable.colorbrewer.diverging import 
+try:
+    from palettable.tableau import Tableau_10
+except ImportError:
+    raise ImportError("Basemap package not found, please install using: pip3 install palettable")
 
 import math
 import argparse
@@ -56,12 +59,18 @@ def parse_args():
             default=300,
             type=int,
             help='Size of the piecharts; default = 300.')
-            
+
+    parser.add_argument('-a',
+            dest='alpha',
+            default=1.0,
+            type=float,
+            help='Opacity of piecharts; 0.0 transparent through 1.0 opaque (default).')
+
     return parser.parse_args()
 
-def draw_pie(ax, ratios, X, Y, size=5000):
+def draw_pie(ax, ratios, X, Y, size, alpha):
     N = len(ratios)
-    colors = ['red','blue','green','yellow','magenta','purple']
+    colors = Tableau_10.mpl_colors
     
     xy = []
  
@@ -74,7 +83,7 @@ def draw_pie(ax, ratios, X, Y, size=5000):
         start += ratio
  
     for i, xyi in enumerate(xy):
-        ax.scatter([X], [Y], marker=(xyi,0), s=size, facecolor=colors[i], zorder=3)
+        ax.scatter([X], [Y], marker=(xyi,0), s=size, facecolor=colors[i], zorder=3, alpha=alpha)
 
 def rendermap(llLon=-11.0, llLat=34.0, urLon=40.0, urLat=71.5, projection='mill', drawgrid=False):
     '''Draws a map in Lambert Equal Area projection.
@@ -136,9 +145,6 @@ def main():
 
     pops = pandas.read_table(args.input, delim_whitespace=True)
     
-    #How many populations?
-    N = pops.shape[1] - 3
-    
     # Plot basemap
     if args.coords == True:
         #Compute map canvas + marigins
@@ -171,7 +177,7 @@ def main():
         # Get proportions
         proportions = list(pop[3:pop.shape[0]])
         # Plot piecharts
-        draw_pie(ax,proportions, X, Y, size=args.piesize)
+        draw_pie(ax,proportions, X, Y, size=args.piesize, alpha=args.alpha)
 	
 	# Save or show the plot
     if args.output:
