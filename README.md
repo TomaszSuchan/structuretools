@@ -24,7 +24,8 @@ arguments:
 Example:
 
 ```
-./str2map.py -p sampledata/populations.txt -f sampledata/1.str -i sampledata/1.2.meanQ -o out.csv
+./str2map.py -p sampledata/populations-str.txt 
+-f sampledata/samples-str.txt -i sampledata/k4-str -o out.csv
 ```
 
 ## plotmap.py
@@ -60,6 +61,6 @@ Important note - currently 10-colour palette is hardcoded in the script, you can
 You can skip saving the intermediate csv file and pipe `str2map.py` output directly to `plotmap.py`:
 
 ```
-./str2map.py -p sampledata/populations.txt 
--f sampledata/1.str -i sampledata/1.2.meanQ | ./plotmap.py -o map.png
+./str2map.py -p sampledata/populations-str.txt 
+-f sampledata/samples-str.txt -i sampledata/k4-str | ./plotmap.py -o map.png
 ```

@@ -21,8 +21,8 @@ def parse_args():
     parser.add_argument('-f',
             type=argparse.FileType('r'),
             required=True,
-            dest="strinp",
-            help='The file that was used for the Structure run')
+            dest="samples",
+            help='The file with sample names that were used for the Structure run')
 
     parser.add_argument('-s',
             type=str,
@@ -34,7 +34,7 @@ def parse_args():
             type=argparse.FileType('r'),
             required=True,
             dest="strout",
-            help='FastStructure output file')
+            help='Q-matrix file (fastStructure, Structure or Clumpp output file)')
 
     parser.add_argument('-o',
             type=argparse.FileType('w'),
@@ -46,37 +46,37 @@ def parse_args():
 
 def main():
     args = parse_args()
-    
+
     # Load populations file
     pops = pandas.read_table(args.popfile, header=None, delim_whitespace=True)
     pops.columns = ['pop','lon','lat']
 
-    # Load Structure input file
-    structureinp = pandas.read_table(args.strinp, header=None, delim_whitespace=True)
-    # Get sample and population name from 1st column of the Structure input file
-    samplenames = structureinp.iloc[::2,0]
-    samplenames = samplenames.reset_index()[0]
-    popnames = samplenames.str.rpartition('_')[0]
-
     # Load Structure output file
     structureout = pandas.read_table(args.strout, header=None, delim_whitespace=True)
+    #keep only columns with floats = only the Q matrix
+    structureout =  structureout.loc[:, structureout.dtypes == 'float64']
+
+    # Load samples file
+    samplenames = pandas.read_table(args.samples, header=None, delim_whitespace=True)
+    
+    popnames = samplenames[0].str.rpartition('_')[0]
 
     # Merge population name with Structure output
-    structureout = structureout.round(0).astype(int) #round the likelihoods to 1 or 0
+    #structureout = structureout.round(0).astype(int) #round the likelihoods to 1 or 0
     structureout = pandas.concat([popnames, structureout], axis=1, ignore_index=True)
 
     # Get pivot table with populations as rows and haplotypes as columns
     # and merge with geographical coordinatesi
-    pivottable = structureout.groupby(0, as_index = False).sum()
+    pivottable = structureout.groupby(0, as_index = False).mean()
     pivottable = pops.merge(pivottable, how='right', left_on='pop', right_on=0)
-    pivottable = pivottable.drop(0, 1) #remove second col with popnames in merged table
+    pivottable = pivottable.drop(0, axis=1) #remove second col with popnames in merged table
 
     # Write csv file for qGIS or to stdout
     if args.output:
-    	args.output.write(pivottable.to_csv(sep='\t', index=False))
+        args.output.write(pivottable.to_csv(sep='\t', index=False))
     else:
-    	print(pivottable)
-     
+        print(pivottable)
+
 if __name__ == "__main__":
     main()
 
